@@ -8,6 +8,7 @@ import (
 	"github.com/traefik/yaegi/stdlib"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 )
 
@@ -23,7 +24,15 @@ func createDirEnv(dst, src string) error {
 		return err
 	}
 
-	return nil
+	return runGoModVendor(moduleRoot)
+}
+
+func runGoModVendor(dst string) error {
+	cmd := exec.Command("go", "mod", "vendor")
+	cmd.Dir = dst
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 type BuildOptions struct {
