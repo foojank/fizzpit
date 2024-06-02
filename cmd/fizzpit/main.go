@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"github.com/foojank/fizzpit"
 	"os"
 )
-import "github.com/foojank/fizzpit"
 
 func main() {
 	switch os.Args[1] {
