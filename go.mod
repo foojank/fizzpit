@@ -5,6 +5,7 @@ go 1.22.2
 require (
 	github.com/otiai10/copy v1.14.0
 	github.com/traefik/yaegi v0.16.1
+	golang.org/x/mod v0.18.0
 )
 
 require (

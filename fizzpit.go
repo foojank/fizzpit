@@ -7,15 +7,32 @@ import (
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 	"github.com/traefik/yaegi/stdlib/unrestricted"
+	"golang.org/x/mod/modfile"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
 
+func getModuleName(file string) (string, error) {
+	goModBytes, err := os.ReadFile(file)
+	if err != nil {
+		return "", err
+	}
+
+	modName := modfile.ModulePath(goModBytes)
+	return modName, nil
+}
+
 func createDirEnv(dst, src string) error {
-	moduleRoot := filepath.Join(dst, "src")
-	err := os.MkdirAll(moduleRoot, 0755)
+	goModPath := filepath.Join(src, "go.mod")
+	moduleName, err := getModuleName(goModPath)
+	if err != nil {
+		return err
+	}
+
+	moduleRoot := filepath.Join(dst, "src", moduleName)
+	err = os.MkdirAll(moduleRoot, 0755)
 	if err != nil {
 		return err
 	}
@@ -93,6 +110,7 @@ func Exec(ctx context.Context, file string, opts ExecOptions) error {
 	defer zr.Close()
 
 	yi := interp.New(interp.Options{
+		GoPath:               ".",
 		Stdin:                opts.Stdin,
 		Stdout:               opts.Stdout,
 		Stderr:               opts.Stderr,
