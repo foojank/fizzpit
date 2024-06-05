@@ -95,6 +95,7 @@ func Build(src string, opts BuildOptions) error {
 
 type ExecOptions struct {
 	Command      string
+	Args         []string
 	Stdin        io.Reader
 	Stdout       io.Writer
 	Stderr       io.Writer
@@ -114,7 +115,7 @@ func Exec(ctx context.Context, file string, opts ExecOptions) error {
 		Stdin:                opts.Stdin,
 		Stdout:               opts.Stdout,
 		Stderr:               opts.Stderr,
-		Args:                 nil, // TODO: parse from command
+		Args:                 opts.Args,
 		Env:                  opts.Env,
 		SourcecodeFilesystem: zr,
 		Unrestricted:         opts.Unrestricted,
