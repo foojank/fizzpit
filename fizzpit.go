@@ -1,4 +1,4 @@
-package fizzpit
+package fzz
 
 import (
 	"archive/zip"

@@ -1,4 +1,4 @@
-module github.com/foojank/fizzpit
+module github.com/foojank/fzz
 
 go 1.22.2
 
