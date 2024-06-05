@@ -6,6 +6,7 @@ import (
 	"github.com/otiai10/copy"
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
+	"github.com/traefik/yaegi/stdlib/unrestricted"
 	"io"
 	"os"
 	"os/exec"
@@ -103,6 +104,13 @@ func Exec(ctx context.Context, file string, opts ExecOptions) error {
 	err = yi.Use(stdlib.Symbols)
 	if err != nil {
 		return err
+	}
+
+	if opts.Unrestricted {
+		err = yi.Use(unrestricted.Symbols)
+		if err != nil {
+			return err
+		}
 	}
 
 	_, err = yi.EvalPathWithContext(ctx, opts.Command)
