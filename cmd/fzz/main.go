@@ -17,7 +17,8 @@ func main() {
 		}
 	case "exec":
 		err := fzz.Exec(context.TODO(), os.Args[2], fzz.ExecOptions{
-			Command: os.Args[3],
+			Command:      os.Args[3],
+			Unrestricted: true,
 		})
 		if err != nil {
 			panic(err)
