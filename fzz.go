@@ -101,6 +101,7 @@ type ExecOptions struct {
 	Stderr       io.Writer
 	Env          []string
 	Unrestricted bool
+	Imports      []interp.Exports
 }
 
 func Exec(ctx context.Context, file string, opts ExecOptions) error {
@@ -120,16 +121,14 @@ func Exec(ctx context.Context, file string, opts ExecOptions) error {
 		SourcecodeFilesystem: zr,
 		Unrestricted:         opts.Unrestricted,
 	})
-	err = yi.Use(stdlib.Symbols)
-	if err != nil {
-		return err
-	}
 
+	// Import symbols
+	_ = yi.Use(stdlib.Symbols)
 	if opts.Unrestricted {
-		err = yi.Use(unrestricted.Symbols)
-		if err != nil {
-			return err
-		}
+		_ = yi.Use(unrestricted.Symbols)
+	}
+	for i := range opts.Imports {
+		_ = yi.Use(opts.Imports[i])
 	}
 
 	_, err = yi.EvalPathWithContext(ctx, opts.Command)
